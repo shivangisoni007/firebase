@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="./index.css">
+  <title>Firebase authentication</title>
+ <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+ <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-firestore.js"></script>
+</head>  
+<body>
+  <img class="wave" src="./img/wave.png">
+  <div class="container">
+    <div class="img">
+      <img src="img/bg.svg">
+    </div>
+  <div id="signup" class="login-content">
+    <img src="img/avatar.svg">
+    <h1>Sign Up</h1>
+    <input type="email" id="email-s" placeholder="Email">
+    <input type="password" id="password-s" placeholder="Password">
+    <button id="signupBtn">Sign Up</button><br>
+    <a id="login-ref" href="#">Log in instead</a>
+  </div>
+  <div id="login" class="login-content">
+    <img src="img/avatar.svg">
+    <h1>Log In</h1>
+    <input type="email" id="email-l" placeholder="Email">
+    <input type="password" id="password-l" placeholder="Password">
+    <button id="loginBtn">Log In</button><br>
+    <a id="signup-ref" href="#">Sign Up instead</a>
+  </div>
+</div>
+  <div id="loggedin" class="login-page">
+    <h1>WELCOME</h1>
+    <h2>You are now logged in</h2>
+    <img src="img/undraw_growth_analytics_8btt.svg">
+    <button id="logoutBtn">Logout</button>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('#login-ref').click(function(){
+        $('#login').show()
+        $('#signup').hide();
+      })
+      $('#signup-ref').click(function(){
+        $('#signup').show();
+        $('#login').hide()
+      })
+    })
+  </script>
+  <script>
+     var firebaseConfig = {
+    apiKey: "AIzaSyD7-6cKlIn5SXwZlul49MWIg8uhRW5BC6w",
+    authDomain: "demoproject-e0458.firebaseapp.com",
+    databaseURL: "https://demoproject-e0458.firebaseio.com",
+    projectId: "demoproject-e0458",
+    storageBucket: "demoproject-e0458.appspot.com",
+    messagingSenderId: "714955904657",
+    appId: "1:714955904657:web:7a0d2e3aacca28bf6c1130",
+    measurementId: "G-S9VLPXV9HX"
+  };
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  </script>
+<script>
+    $(document).ready(function(){
+      $('#signupBtn').click(function(){
+        var email = $('#email-s').val()
+        var password = $('#password-s').val()
+        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        alert(errorMessage);
+      });
+    })
+      $('#loginBtn').click(function(){
+        var email = $('#email-l').val()
+        var password = $('#password-l').val()
+        firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        alert(errorMessage);
+      });
+    })
+    firebase.auth().onAuthStateChanged(function(user){
+      if(user) {
+        $('#signup').hide()
+        $('#login').hide()
+        $('#loggedin').show()
+      }
+    })
+    $('#logoutBtn').click(function(){
+      firebase.auth().signOut().then(function(){
+        $('#signup').hide()
+        $('#login').show()
+        $('#loggedin').hide()
+      }).catch(function(error){
+
+      });
+    })
+  })
+  </script>
+</body>
+</html>
